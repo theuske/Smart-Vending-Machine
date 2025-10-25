@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "57208501982",
+    "firebase_url": "https://smartvendingmachine-2e3f8-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "smartvendingmachine-2e3f8",
+    "storage_bucket": "smartvendingmachine-2e3f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57208501982:android:b62f9d01e0bff50c8eb44f",
+        "android_client_info": {
+          "package_name": "com.example.smart_vending"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6DwS5tPCNZMu_NpEEQ16zACy9qa0F9Sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

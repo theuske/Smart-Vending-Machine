@@ -7,7 +7,7 @@
 #include <ArduinoJson.h>
 
 /* ===================== CONFIG (portal-overridable) ===================== */
-String RTDB_BASE = "https://smartvendingmachine-2e3f8-default-rtdb.europe-west1.firebasedatabase.app"; // no trailing slash
+String RTDB_BASE = "https://smartvendingmachine-2e3f8-default-rtdb.europe-west1.firebasedatabase.app"; 
 String DEVICE_ID = "arduino-001";
 
 /* ===================== Hardware pins ===================== */
@@ -27,18 +27,18 @@ Preferences prefs;
 unsigned long lastPushMs = 0;
 const unsigned long PUSH_INTERVAL_MS = 8000;
 
-// ---- Voorraad (DUTCH) — ESP32 is de bron van waarheid ----
+// ---- stock ----
 int eieren = 12;
 int melk   = 7;
 int aardbeien = 6;
 int kaas      = 4;
 
-// Last known *good* fix (fallback)
+
 double lastLat = 51.441642, lastLng = 5.4697225;
 
 /* ======== GPS quality thresholds ======== */
-const float HDOP_MAX = 1.8f;   // lager = beter (1.0~2.0 = top)
-const int   MINSATS  = 6;      // min satelieten
+const float HDOP_MAX = 1.8f;   
+const int   MINSATS  = 6;      
 static float hdopToMeters(float hdop) { return hdop * 5.0f; }
 
 /* ======== Mini median filter ======== */
@@ -121,7 +121,7 @@ String makeJson(double lat, double lng, bool validFix, float hdop, int sats) {
   s += "\"accuracy_m\":" + String(acc_m, 1) + ",";
   s += "\"status\":\"" + status + "\",";
 
-  // 🔥 DUTCH stock keys
+  //keys
   s += "\"stock\":{";
   s +=   "\"eieren\":"    + String(eieren)    + ",";
   s +=   "\"melk\":"      + String(melk)      + ",";
@@ -182,7 +182,7 @@ void startConfigPortal(bool force = false) {
 }
 
 /* ===================== Order processing ===================== */
-// Poll /orders/<DEVICE_ID> and handle status machine
+
 void processPendingOrders() {
   if (WiFi.status() != WL_CONNECTED) return;
 
@@ -221,11 +221,10 @@ void processPendingOrders() {
       continue;
     }
 
-    // accept -> dispensing -> done
+  
     httpPatch("/orders/" + DEVICE_ID + "/" + orderId + ".json", "{\"status\":\"accepted\"}");
     httpPatch("/orders/" + DEVICE_ID + "/" + orderId + ".json", "{\"status\":\"dispensing\"}");
 
-    // TODO: real motors here
     delay(1500);
 
     // decrement local stock
@@ -266,7 +265,6 @@ void loop() {
   // Feed GPS parser
   while (GPSser.available()) gps.encode(GPSser.read());
 
-  // On new GPS data, update "last good" with median when quality is OK
   if (gps.location.isUpdated()) {
     const bool valid = gps.location.isValid();
     const double lat = gps.location.lat();
@@ -288,7 +286,7 @@ void loop() {
     }
   }
 
-  // Long-press during runtime (>2s) to re-open portal
+  
   static unsigned long pressedAt = 0;
   if (digitalRead(PIN_FORCE_PORTAL) == LOW) {
     if (pressedAt == 0) pressedAt = millis();
